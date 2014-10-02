@@ -2,8 +2,9 @@ package com.fin.quote;
 
 import java.io.IOException;
 
-import org.junit.Before;
+import com.fin.dao.QuotesDao;
 
+import org.junit.Before;
 import org.apache.http.client.ClientProtocolException;
 import static org.junit.Assert.*;
 import org.junit.Test;

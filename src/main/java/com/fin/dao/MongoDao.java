@@ -29,14 +29,16 @@ public class MongoDao
 
   public List<Stock> getStocks()
   {
-    List<Stock> stocks = new ArrayList<Stock>();
-    DBCursor cursor = stocksCollection.find();
-    for (DBObject stockDbObject : cursor)
+    List<Stock> stocks = new ArrayList<>();
+    try (DBCursor cursor = stocksCollection.find())
     {
-      String symbol = (String) stockDbObject.get("symbol");
-      Double volume = (Double) stockDbObject.get("volume");
-      Stock stock = new Stock(symbol, volume);
-      stocks.add(stock);
+      for (DBObject stockDbObject : cursor)
+      {
+        String symbol = (String) stockDbObject.get("symbol");
+        Double volume = (Double) stockDbObject.get("volume");
+        Stock stock = new Stock(symbol, volume);
+        stocks.add(stock);
+      }
     }
     return stocks;
   }
@@ -62,7 +64,6 @@ public class MongoDao
     {
       return true;
     }
-
     return false;
   }
 
