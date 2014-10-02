@@ -18,7 +18,7 @@ public class StockHandler
     this.quotesDao = new QuotesDao();
   }
   
-  public double getTotalCurrentValue() throws ClientProtocolException, IOException
+  public double getTotalCurrentValue()
   {
     double totalValue = 0;
     for (Stock stock : stocks)

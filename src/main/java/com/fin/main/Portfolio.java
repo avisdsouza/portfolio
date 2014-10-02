@@ -1,32 +1,29 @@
 package com.fin.main;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.http.client.ClientProtocolException;
-
+import com.fin.StockUtil;
 import com.fin.model.Stock;
 import com.fin.stock.StockHandler;
+import org.apache.http.client.ClientProtocolException;
 
-public class Portfolio
+public class Portfolio implements Runnable
 {
-
+  private StockUtil stockUtil;
   private List<Stock> stocks;
 
-  public Portfolio()
+  public Portfolio() throws UnknownHostException
   {
-    Stock voo = new Stock("VOO", 1.75);
-    Stock vb = new Stock("VB", 4.93);
-    Stock vwo = new Stock("VWO", 10.02);
-    Stock vnq = new Stock("VNQ", 8.84);
-    Stock corp = new Stock("CORP", 1.31);
-    Stock shy = new Stock("SHY", 1.33);
-
-    stocks = Arrays.asList(voo, vb, vwo, vnq, corp, shy);
+    stockUtil = new StockUtil();
+    stocks = stockUtil.getStocks();
   }
 
-  public void execute() throws ClientProtocolException, IOException
+  public void run()
   {
     StockHandler stockHandler = new StockHandler(stocks);
     double totalValue = stockHandler.getTotalCurrentValue();
@@ -35,6 +32,7 @@ public class Portfolio
 
   public static void main(String[] args) throws ClientProtocolException, IOException
   {
-    new Portfolio().execute();
+    final ScheduledExecutorService s = Executors.newSingleThreadScheduledExecutor();
+    s.scheduleAtFixedRate(new Portfolio(), 0, 1, TimeUnit.MINUTES);
   }
 }
